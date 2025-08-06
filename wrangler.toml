@@ -1,0 +1,13 @@
+name = "kofi-to-discord"
+main = "src/worker.js"
+workers_dev = true
+compatibility_date = "2025-08-06"
+
+[[routes]]
+pattern = "kofi-to-discord.workers.quacksire.dev"
+zone_name = "quacksire.dev"
+custom_domain = true
+
+[observability]
+enabled = true
+head_sampling_rate = 1
