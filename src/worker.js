@@ -1,81 +1,77 @@
 export default {
-  async fetch(request, env, ctx) {
+	async fetch(request, env, ctx) {
 
-    //if (request.method !== "POST") {
-    //  return new Response("Method not allowed", { status: 405 });
-    //}
+		let WEBHOOK = "https://discord.com/api/webhooks/1402757608821100675/5KcdzcHljmNlVz38hEh-SElKSfFGuId1N7JzEJR5YLm1j9fS7p-2xMHc-hZCvEcZI3Wd?with_components=true";
 
-    const url = new URL(request.url);
-    const channelId = url.pathname.split("/").pop();
+		const contentType = request.headers.get('content-type') || '';
+		if (!contentType.includes('application/x-www-form-urlencoded')) {
+			return new Response('Invalid content type', { status: 400 });
+		}
 
-    console.log(url)
+		const formData = await request.formData();
+		const dataRaw = formData.get('data');
+		if (!dataRaw) {
+			return new Response('Missing data field', { status: 400 });
+		}
 
-    // Replace with actual Discord webhook URLs mapped per channel
-    const DISCORD_WEBHOOKS = [
-      "https://discord.com/api/webhooks/1402757608821100675/5KcdzcHljmNlVz38hEh-SElKSfFGuId1N7JzEJR5YLm1j9fS7p-2xMHc-hZCvEcZI3Wdy"
-      // Add more channel-to-webhook mappings as needed
-    ];
+		let payload;
+		try {
+			payload = JSON.parse(dataRaw);
+		} catch (e) {
+			return new Response('Invalid JSON in data field', { status: 400 });
+		}
 
-    let body;
-    try {
-      const raw = await request.json();
-      body = typeof raw.data === "string" ? JSON.parse(raw.data) : raw.data;
-    } catch (err) {
-      return new Response("Invalid JSON", { status: 400 });
-    }
+		const name = payload.from_name || "Someone";
+		const amount = `${payload.amount || "?"} ${payload.currency || "$"}`;
+		const message = payload.message || "(no message)";
+		const url = payload.url || "https://ko-fi.com/";
 
-    // Basic validation
-    const requiredFields = ["type", "from_name", "amount", "url"];
-    for (const field of requiredFields) {
-      if (!(field in body)) {
-        return new Response(`Missing field: ${field}`, { status: 400 });
-      }
-    }
+		const content = `+${amount} from **${name}**: ${message}\n-# <@569910296303632414>`;
 
-    // Handle private donation
-    if (body.is_public === false) {
-      body.from_name = "Anonymous";
-      body.message = "";
-    }
+		const embed = {
+			title: "☕ New Ko-fi Contribution",
+			url,
+			color: 0x29ABE0,
+			timestamp: new Date().toISOString(),
+			fields: [
+				{ name: "Name", value: name, inline: true },
+				{ name: "Amount", value: amount, inline: true },
+				...(payload.message ? [{ name: "Message", value: payload.message }] : [])
+			]
+		};
 
-    const embed = {
-      title: "☕ New Ko-fi contribution",
-      url: body.url,
-      color: 0x29ABE0,
-      thumbnail: {
-        url: "https://user-images.githubusercontent.com/7295363/99930265-49bad700-2d05-11eb-9057-1a013c45ee2c.png"
-      },
-      fields: [
-        {
-          name: "**Name**",
-          value: body.from_name,
-          inline: true
-        },
-        {
-          name: "**Amount**",
-          value: `${body.currency || "$"}${body.amount}`,
-          inline: true
-        },
-        ...(body.message?.length > 0
-          ? [{
-              name: "**Message**",
-              value: body.message
-            }]
-          : [])
-      ],
-      timestamp: new Date().toISOString()
-    };
+		const components = {
+			type: 1,
+			components: [
+				{
+					type: 2,
+					style: 5,
+					label: "See on Ko-fi",
+					url: url
+				}
+			]
+		}
 
-    DISCORD_WEBHOOKS.forEach((hook) => {
-      fetch(hook, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ embeds: [embed] })
-      });
-    })
+		const discordBody = {
+			content,
+			//embeds: [embed],
+			components: [components]
+		};
 
-    return new Response("Ko-fi webhook relayed to Discord", { status: 200 });
-  }
+		const post = await fetch(WEBHOOK, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(discordBody)
+		});
+
+		if (!post.ok) {
+			const errText = await post.text();
+			console.error("Discord webhook failed:", post.status, errText);
+			return new Response("Discord webhook error", { status: 500 });
+		}
+
+		return new Response("Ko-fi webhook relayed to Discord", { status: 200 });
+	}
 };
