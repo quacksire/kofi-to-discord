@@ -21,6 +21,10 @@
 			"KOFISECRET": {
 				"type": "string",
 				"description": "**REQUIRED** Kofi Verification Token. This is used to verify that the request is coming from Kofi. Get in the [Advanced Drop Down](https://ko-fi.com/manage/webhooks) of your Kofi page."
+			},
+			"PINGUSERID": {
+				"type": "string",
+				"description": "**REQUIRED** Discord User ID to ping on donations. This is used to notify a specific user in Discord when a donation is made. Use `&` in front to ping a role"
 			}
 		}
 	}

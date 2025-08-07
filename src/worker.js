@@ -3,6 +3,7 @@ export default {
 
 		let WEBHOOK = env.WEBHOOK
 		let verification_token = env.KOFISECRET;
+		let userping = env.PINGUSERID
 
 		if (!WEBHOOK || !verification_token) {
 			return new Response('Environment variables WEBHOOK and KOFISECRET must be set', { status: 500 });
@@ -35,7 +36,7 @@ export default {
 		const message = payload.message || "";
 		const url = payload.url || "https://ko-fi.com/";
 
-		const content = `+${amount} from **${name}**: ${message}\n-# <@569910296303632414>`;
+		const content = `+${amount} from **${name}**: ${message}\n-# <@${userping}>`;
 
 
 		const components = {
