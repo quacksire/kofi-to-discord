@@ -3,6 +3,9 @@
 A Cloudflare Worker that forwards Ko-fi donations to a Discord channel via a webhook.
 [![wakatime](https://wakatime.com/badge/user/33a2bb04-aa22-4536-80a6-3014c35843e1/project/2fe572a7-55f4-405b-a573-65b6225f5428.svg)](https://wakatime.com/badge/user/33a2bb04-aa22-4536-80a6-3014c35843e1/project/2fe572a7-55f4-405b-a573-65b6225f5428)
 
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/quacksire/kofi-to-discord)
+
+
 ## Features
 
 - Verifies incoming requests from Ko-fi using a verification token.
