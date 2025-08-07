@@ -1,8 +1,7 @@
 # Ko-fi to Discord Webhook
 
 A Cloudflare Worker that forwards Ko-fi donations to a Discord channel via a webhook.
-
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/your-username/kofi-to-discord)
+[![wakatime](https://wakatime.com/badge/user/33a2bb04-aa22-4536-80a6-3014c35843e1/project/2fe572a7-55f4-405b-a573-65b6225f5428.svg)](https://wakatime.com/badge/user/33a2bb04-aa22-4536-80a6-3014c35843e1/project/2fe572a7-55f4-405b-a573-65b6225f5428)
 
 ## Features
 
@@ -19,9 +18,15 @@ A Cloudflare Worker that forwards Ko-fi donations to a Discord channel via a web
 
 ## Installation
 
+You can deploy this worker directly to Cloudflare Workers using the button below:
+
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/quacksire/kofi-to-discord)
+
+### Manual Setup
+
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/kofi-to-discord.git
+git clone https://github.com/quacksire/kofi-to-discord
 cd kofi-to-discord
 ```
 2. Install dependencies:
