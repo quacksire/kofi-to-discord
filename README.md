@@ -12,6 +12,9 @@ A Cloudflare Worker that forwards Ko-fi donations to a Discord channel via a web
 - Sends donation details to a Discord channel using a webhook.
 - Includes a button in the Discord message to view the donation on Ko-fi.
 
+<img width="470" height="104" alt="image" src="https://github.com/user-attachments/assets/a80ce74a-3d86-4be0-93aa-db69b1e15e2f" />
+
+
 ## Requirements
 
 - [Cloudflare Workers](https://workers.cloudflare.com/)
