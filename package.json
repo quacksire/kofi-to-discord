@@ -1,5 +1,7 @@
 {
 	"name": "kofi-to-discord",
+	"author": "quacksire",
+	"description": "A Cloudflare Worker that forwards Kofi donations to a Discord channel via a webhook.",
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
@@ -9,5 +11,15 @@
 	},
 	"devDependencies": {
 		"wrangler": "^4.28.0"
+	},
+	"cloudflare": {
+		"bindings": {
+			"WEBHOOK": {
+				"description": "Discord Channel Webhook URL"
+			},
+			"KOFISECRET": {
+				"description": "Kofi Verification Token. This is used to verify that the request is coming from Kofi. Get in the [Advanced Drop Down](https://ko-fi.com/manage/webhooks) of your Kofi page."
+			}
+		}
 	}
 }

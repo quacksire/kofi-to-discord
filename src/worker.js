@@ -1,7 +1,9 @@
 export default {
 	async fetch(request, env, ctx) {
 
-		let WEBHOOK = "https://discord.com/api/webhooks/1402757608821100675/5KcdzcHljmNlVz38hEh-SElKSfFGuId1N7JzEJR5YLm1j9fS7p-2xMHc-hZCvEcZI3Wd?with_components=true";
+		let WEBHOOK = env.WEBHOOK
+		let verification_token = env.KOFISECRET;
+
 
 		const contentType = request.headers.get('content-type') || '';
 		if (!contentType.includes('application/x-www-form-urlencoded')) {
@@ -21,24 +23,17 @@ export default {
 			return new Response('Invalid JSON in data field', { status: 400 });
 		}
 
-		const name = payload.from_name || "Someone";
+		if (!payload.verification_token || payload.verification_token !== verification_token) {
+			return new Response('Invalid verification token', { status: 403 });
+		}
+
+		const name = payload.is_public ? payload.from_name || "Someone" : "Someone";
 		const amount = `${payload.amount || "?"} ${payload.currency || "$"}`;
-		const message = payload.message || "(no message)";
+		const message = payload.message || "";
 		const url = payload.url || "https://ko-fi.com/";
 
 		const content = `+${amount} from **${name}**: ${message}\n-# <@569910296303632414>`;
 
-		const embed = {
-			title: "☕ New Ko-fi Contribution",
-			url,
-			color: 0x29ABE0,
-			timestamp: new Date().toISOString(),
-			fields: [
-				{ name: "Name", value: name, inline: true },
-				{ name: "Amount", value: amount, inline: true },
-				...(payload.message ? [{ name: "Message", value: payload.message }] : [])
-			]
-		};
 
 		const components = {
 			type: 1,
@@ -54,11 +49,10 @@ export default {
 
 		const discordBody = {
 			content,
-			//embeds: [embed],
 			components: [components]
 		};
 
-		const post = await fetch(WEBHOOK, {
+		const post = await fetch(`${WEBHOOK}?with_components=true`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
