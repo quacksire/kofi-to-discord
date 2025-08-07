@@ -15,10 +15,12 @@
 	"cloudflare": {
 		"bindings": {
 			"WEBHOOK": {
-				"description": "Discord Channel Webhook URL"
+				"description": "**REQUIRED** Discord Channel Webhook URL",
+				"type": "string"
 			},
 			"KOFISECRET": {
-				"description": "Kofi Verification Token. This is used to verify that the request is coming from Kofi. Get in the [Advanced Drop Down](https://ko-fi.com/manage/webhooks) of your Kofi page."
+				"type": "string",
+				"description": "**REQUIRED** Kofi Verification Token. This is used to verify that the request is coming from Kofi. Get in the [Advanced Drop Down](https://ko-fi.com/manage/webhooks) of your Kofi page."
 			}
 		}
 	}
