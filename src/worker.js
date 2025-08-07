@@ -4,6 +4,9 @@ export default {
 		let WEBHOOK = env.WEBHOOK
 		let verification_token = env.KOFISECRET;
 
+		if (!WEBHOOK || !verification_token) {
+			return new Response('Environment variables WEBHOOK and KOFISECRET must be set', { status: 500 });
+		}
 
 		const contentType = request.headers.get('content-type') || '';
 		if (!contentType.includes('application/x-www-form-urlencoded')) {
